@@ -23,3 +23,9 @@ mongoose
     .catch((error) => {  // Pass the error object to the .catch block
         console.error('Error connecting to database:', error);
     });
+
+    const planRoutes = require('./routes/planRoutes');
+    // other imports...
+    
+    app.use('/api/plans', planRoutes);
+    // other middleware...   
