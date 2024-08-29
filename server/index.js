@@ -1,31 +1,24 @@
 import express from "express";
-import { PORT, mongoURL } from "./config.js";
 import mongoose from "mongoose";
+import destinationRoutes from "./route/destiationRoutes.js";
+
 
 const app = express();
 
-app.get('/', (req, res) => {
-    console.log(req);
-    return res.status(234).send('Welcome to MERN stack');
-});
-
-// Route
+// Middleware
+app.use(express.json());
+app.use("/destination",destinationRoutes);
 
 
+
+
+//database conection
 mongoose
-    .connect(mongoURL)
-    .then(() => {
-        console.log('App connected to database');
-        app.listen(PORT, () => {
-            console.log(`Server is running on port ${PORT}`);
-        });
-    })
-    .catch((error) => {  // Pass the error object to the .catch block
-        console.error('Error connecting to database:', error);
+  .connect("mongodb+srv://admin:WNM6le3U5gTaDz5d@users.xzqkmsk.mongodb.net/")
+  .then(() => {
+    console.log("Database connected");
+    app.listen(5000, () => {
+      
     });
-
-    const planRoutes = require('./routes/planRoutes');
-    // other imports...
-    
-    app.use('/api/plans', planRoutes);
-    // other middleware...   
+  })
+  .catch((err) => console.log(err));
