@@ -1,22 +1,12 @@
-const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
+import mongoose from "mongoose";
+
+const { Schema } = mongoose;
 
 const destinationSchema = new Schema({
-    name:{type:String,
-        required:true
-    },
-    description: { type: String,
-        required: true
-     },
-    location: { type: String, 
-        required: true 
-    },
-    popular: { type: Boolean, 
-        default: false 
-    },
+  name: { type: String, required: true },
+  description: { type: String, required: true },
+  location: { type: String, required: true },
+  popular: { type: String,required: true  }
 });
 
-module.exports = mongoose.model(
-    "Destination", //file name
-    destinationSchema//funtion name
-)
+export default mongoose.model("Destination", destinationSchema);
