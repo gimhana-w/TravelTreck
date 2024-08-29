@@ -1,13 +1,22 @@
 const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
-const destinationSchema = new mongoose.Schema({
-    name:{type:String, require: true},
-    description:{type: String, require: true},
-    location: {type:String, require: true},
-    image: {type: String},
-    popular:{type:Boolean, default: false}
+const destinationSchema = new Schema({
+    name:{type:String,
+        required:true
+    },
+    description: { type: String,
+        required: true
+     },
+    location: { type: String, 
+        required: true 
+    },
+    popular: { type: Boolean, 
+        default: false 
+    },
 });
 
-const Destination = mongoose.models('Destination',destinationSchema);
-
-module.exports = Destination;
+module.exports = mongoose.model(
+    "Destination", //file name
+    destinationSchema//funtion name
+)

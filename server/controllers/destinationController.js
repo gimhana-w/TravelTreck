@@ -5,11 +5,17 @@ const Destination = require('../models/Destination');
 // @route   GET /api/destinations
 // @access  Public
 const getDestinations = async (req, res) => {
-  try {
-    const destinations = await Destination.find({});
-    res.json(destinations);
-  } catch (error) {
-    res.status(500).json({ message: 'Server Error' });
+
+  let Destination;
+  //get all destination
+  try{
+    destination = await Destination.find();
+  }catch (err){
+    console.log(err);
+  }
+  //not found
+  if (!destination){
+    return res.status(404).json({message:"dastination not found"});
   }
 };
 
