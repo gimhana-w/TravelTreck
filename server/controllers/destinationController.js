@@ -1,94 +1,48 @@
+import Destination from "../models/Destination.js";
 
-const Destination = require('../models/Destination');
+// Get all destinations
+export const getDestinations = async (req, res) => {
+  let destinations;
 
-// @desc    Get all destinations
-// @route   GET /api/destinations
-// @access  Public
-const getDestinations = async (req, res) => {
   try {
-    const destinations = await Destination.find({});
-    res.json(destinations);
-  } catch (error) {
-    res.status(500).json({ message: 'Server Error' });
+    // Fetch all destinations
+    destinations = await Destination.find();
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({ message: "Error fetching destinations" });
   }
-};
 
-// @desc    Get a single destination by ID
-// @route   GET /api/destinations/:id
-// @access  Public
-const getDestinationById = async (req, res) => {
-  try {
-    const destination = await Destination.findById(req.params.id);
-    if (destination) {
-      res.json(destination);
-    } else {
-      res.status(404).json({ message: 'Destination not found' });
-    }
-  } catch (error) {
-    res.status(500).json({ message: 'Server Error' });
+  // If no destinations are found
+  if (!destinations) {
+    return res.status(404).json({ message: "Destinations not found" });
   }
+
+  // Display all destinations
+  return res.status(200).json({ destinations });
 };
 
-// @desc    Create a new destination
-// @route   POST /api/destinations
-// @access  Private/Admin
-const createDestination = async (req, res) => {
-  try {
-    const { name, description, location, image } = req.body;
-    const newDestination = new Destination({ name, description, location, image });
-    const createdDestination = await newDestination.save();
-    res.status(201).json(createdDestination);
-  } catch (error) {
-    res.status(400).json({ message: 'Invalid data' });
+//data insert
+
+export const addDestination = async (req,res,next) =>{
+
+  const{name,description,location,popular} = req.body;
+
+  let destination;
+
+  try{
+    destination = new Destination({name,description,location,popular});
+    await destination.save();
+
+  }catch(err){
+      console.log(err);
+
   }
-};
 
-// @desc    Update a destination
-// @route   PUT /api/destinations/:id
-// @access  Private/Admin
-const updateDestination = async (req, res) => {
-  try {
-    const { name, description, location, image } = req.body;
-    const destination = await Destination.findById(req.params.id);
-
-    if (destination) {
-      destination.name = name;
-      destination.description = description;
-      destination.location = location;
-      destination.image = image;
-
-      const updatedDestination = await destination.save();
-      res.json(updatedDestination);
-    } else {
-      res.status(404).json({ message: 'Destination not found' });
-    }
-  } catch (error) {
-    res.status(400).json({ message: 'Invalid data' });
+  if (!destination){
+    
+    return res.status(404).send({message:"unable to add destination"});
   }
+  return res.status(200).json({destination});
+
 };
 
-// @desc    Delete a destination
-// @route   DELETE /api/destinations/:id
-// @access  Private/Admin
-const deleteDestination = async (req, res) => {
-  try {
-    const destination = await Destination.findById(req.params.id);
-
-    if (destination) {
-      await destination.remove();
-      res.json({ message: 'Destination removed' });
-    } else {
-      res.status(404).json({ message: 'Destination not found' });
-    }
-  } catch (error) {
-    res.status(500).json({ message: 'Server Error' });
-  }
-};
-
-module.exports = {
-  getDestinations,
-  getDestinationById,
-  createDestination,
-  updateDestination,
-  deleteDestination,
-};

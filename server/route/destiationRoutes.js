@@ -1,11 +1,12 @@
-const express = require('express');
+import express from "express"; // Add the import for express
+import { getDestinations, addDestination } from "../controllers/destinationController.js";
 
-const {
-    getDestinations,
-    getDestinationById,
-    createDestination,
-    updateDestination,
-    deleteDestination,
-  } = require('../controllers/destinationController');
 
-  const{ protect, admin } = require('../middlerwares/')
+
+
+const router = express.Router();
+
+router.get("/",getDestinations);
+router.post("/",addDestination);
+export default router;
+
