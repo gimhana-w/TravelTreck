@@ -1,12 +1,13 @@
 // server/routes/planRoutes.js
+import express from "express";
 
-const express = require('express');
-const { createPlan, getUserPlans, updatePlan, deletePlan } = require('../controllers/planController');
+import { createPlan, getUserPlans, updatePlan, deletePlan } from"../controllers/planController.js";
 const router = express.Router();
 
-router.post('/', createPlan);
+//router.post('/', createPlan);
 router.get('/', getUserPlans);
 router.put('/:id', updatePlan);
 router.delete('/:id', deletePlan);
 
-module.exports = router;
+//export default router;
+
