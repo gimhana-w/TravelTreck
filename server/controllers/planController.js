@@ -1,18 +1,20 @@
-const Plan = require('../models/Plan');
+import Plan from "../models/Plan.js"
 
 
 // create new plan
 
-exports.createPlan = async (req, res)=> {
-    try {
+//exports.createPlan = async (req, res)=> {
 
-        const plan = await Plan.create(req.body);
-        re.status(201),jason(plan);
-    }
-    catch (error){
-        res.status(400).json({ message: erro.message });
-    }
-};
+
+    //try {
+
+        //const plan = await Plan.create(req.body);
+        //re.status(201),jason(plan);
+    ///}
+    //catch (error){
+       // res.status(400).json({ message: erro.message });
+    //}
+//npm};
 
 //get all plan
 

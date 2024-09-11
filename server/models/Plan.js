@@ -1,4 +1,4 @@
-<<<<<<< Updated upstream
+
 const mongoose = require('mongoose');
 
 const planSchema = new mongoose.Schema({
@@ -15,22 +15,10 @@ const planSchema = new mongoose.Schema({
     timeseries: true,
 });
 
-const Plan = mongoose.model('Plan' , planSchema);
 
-module.exports = Plan;
-=======
 
-const mongoose = require('mongoose');
+export default mongoose.model("Plan" , planSchema);
 
-const planSchema = new mongoose.Schema({
 
-    user: {type:mongoose.Schema.Types.ObjectId, ref: 'User', required: true},
-    destination:[{ type: mongoose.Schema.Types.ObjectId, ref: 'Destination' }],
-    hotels:
-    vehicles:
-    activities:
-    stratDate:
-    endDaete:
-    totalCost:
-})
->>>>>>> Stashed changes
+
+
