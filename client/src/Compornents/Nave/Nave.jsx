@@ -33,7 +33,7 @@ const Navbar = () => {
 
         {/* Buttons */}
         <div className="space-x-4">
-          <button className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700">
+          <button className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-700">
             Sign in
           </button>
           <button className="bg-gray-300 text-gray-600 px-4 py-2 rounded-md hover:bg-gray-400">
