@@ -11,5 +11,6 @@ router.post("/",addDestination);
 router.get("/:id",getById);
 router.put("/:id",updateDestination);
 router.delete("/:id",deleteDestination);
+
 export default router;
 
