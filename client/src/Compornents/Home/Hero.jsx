@@ -1,5 +1,5 @@
 import React from 'react';
-import heroImage from '../../assets/img1.png'; // Adjust the path based on your structure
+import heroImage from '../../assets/home/img1.png'; // Adjust the path based on your structure
 
 const Hero = () => {
   return (
