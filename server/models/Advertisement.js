@@ -1,8 +1,12 @@
 import mongoose from "mongoose";
 
-const adventureSchema = new mongoose.Schema(
+const advertisementSchema = new mongoose.Schema(
   {
     title: {
+      type: String,
+      required: true,
+    },
+    subtitle: {
       type: String,
       required: true,
     },
@@ -20,5 +24,5 @@ const adventureSchema = new mongoose.Schema(
   }
 );
 
-const Adventure = mongoose.model("Adventure", adventureSchema);
-export default Adventure;
+const Advertisement = mongoose.model("Advertisement", advertisementSchema);
+export default Advertisement;
