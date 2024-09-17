@@ -11,6 +11,7 @@ import {
 import { useState } from "react";
 import VehicleManager from "../Vehicle/VehicleManager";
 import AdvertisementManager from "../Advertisement/Advertisement";
+import Adventure from "../Adventure/Adventure";
 
 const { Sider, Content } = Layout;
 
@@ -105,6 +106,7 @@ const AdminDashboard = () => {
         >
           {activeIndex === 3 && <VehicleManager />}
           {activeIndex === 5 && <AdvertisementManager />}
+          {activeIndex === 7 && <Adventure />}
         </Content>
       </Layout>
     </Layout>
