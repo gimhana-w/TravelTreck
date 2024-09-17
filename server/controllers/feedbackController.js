@@ -7,7 +7,6 @@ import Feedback from "../models/Feedback.js";
  * @param {express.Request} req 
  * @param {express.Response} res  
  */
-
 export const createFeedback = async(req, res) => {
     try{
         const { userName, email, feedbackText, rating } = req.body;
