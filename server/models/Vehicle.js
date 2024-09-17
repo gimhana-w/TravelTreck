@@ -8,7 +8,6 @@ const vehicleSchema = new mongoose.Schema(
     },
     owner: {
       type: String,
-
       required: true,
     },
     email: {

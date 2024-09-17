@@ -1,21 +1,15 @@
 import Vehicle from "../models/Vehicle.js";
-import User from "../models/sysUser.js";
 
 // Create a new vehicle
 export const createVehicle = async (req, res) => {
   try {
-    const { vehicle, ownerId, description, objective, subscription } = req.body;
-
-    // Check if the owner (user) exists
-    const owner = await User.findById(ownerId);
-    if (!owner) return res.status(404).json({ message: "Owner not found" });
+    const { vehicle, email, description, owner } = req.body;
 
     const newVehicle = new Vehicle({
       vehicle,
-      owner: ownerId,
       description,
-      objective,
-      subscription,
+      owner,
+      email,
     });
     await newVehicle.save();
 
@@ -54,21 +48,19 @@ export const getVehicleById = async (req, res) => {
 // Update a vehicle
 export const updateVehicle = async (req, res) => {
   try {
-    const { vehicle, description, objective, subscription } = req.body;
+    const { vehicle, email, description, owner } = req.body;
     const updatedVehicle = await Vehicle.findByIdAndUpdate(
       req.params.id,
-      { vehicle, description, objective, subscription },
+      { vehicle, description, email, owner },
       { new: true }
     ).populate("owner", "name email");
 
     if (!updatedVehicle)
       return res.status(404).json({ message: "Vehicle not found" });
-    res
-      .status(200)
-      .json({
-        message: "Vehicle updated successfully",
-        vehicle: updatedVehicle,
-      });
+    res.status(200).json({
+      message: "Vehicle updated successfully",
+      vehicle: updatedVehicle,
+    });
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
