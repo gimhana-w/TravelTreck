@@ -8,7 +8,7 @@ import Feedback from "../models/Feedback.js";
  * @param {express.Response} res  
  */
 
-exports.createFeedBack = async(req, res) => {
+export const createFeedback = async(req, res) => {
     try{
         const { userName, email, feedbackText, rating } = req.body;
 
@@ -29,7 +29,7 @@ exports.createFeedBack = async(req, res) => {
  * @param {express.Request} req 
  * @param {express.Response} res  
  */
-exports.getAllFeedbacks = async(req, res) => {
+export const getAllFeedbacks = async(req, res) => {
     try{
         const feedbackList = await Feedback.find({});
         res.status(200).json(feedbackList);
@@ -45,7 +45,7 @@ exports.getAllFeedbacks = async(req, res) => {
  * @param {express.Request} req 
  * @param {express.Response} res  
  */
-exports.getAllPendingFeedbacks = async(req, res) => {
+export const getAllPendingFeedbacks = async(req, res) => {
     try {
         const pendingFeedbackList = await Feedback.find({status: 'pending'});
         res.status(200).json(pendingFeedbackList);
@@ -61,7 +61,7 @@ exports.getAllPendingFeedbacks = async(req, res) => {
  * @param {express.Request} req 
  * @param {express.Response} res  
  */
-exports.getAllApprovedFeedbacks = async(req,res) => {
+export const getAllApprovedFeedbacks = async(req,res) => {
     try {
         const approvedFeedbackList = await Feedback.find({status: 'approved'});
         res.status(200).json(approvedFeedbackList);
@@ -77,7 +77,7 @@ exports.getAllApprovedFeedbacks = async(req,res) => {
  * @param {express.Request} req 
  * @param {express.Response} res  
  */
-exports.getAllRejectedFeedbacks = async(req,res) => {
+export const getAllRejectedFeedbacks = async(req,res) => {
     try {
         const rejectedFeedbackList = await Feedback.find({status: 'rejected'});
         res.status(200).json(rejectedFeedbackList);
@@ -93,7 +93,7 @@ exports.getAllRejectedFeedbacks = async(req,res) => {
  * @param {express.Request} req 
  * @param {express.Response} res  
  */
-exports.getFeedbackById = async(req,res) => {
+export const getFeedbackById = async(req,res) => {
     try {
         const feedback = await Feedback.findById(req.params.id);
         if(!feedback){
@@ -112,7 +112,7 @@ exports.getFeedbackById = async(req,res) => {
  * @param {express.Request} req 
  * @param {express.Response} res  
  */
-exports.updateFeedback = async(req,res) => {
+export const updateFeedback = async(req,res) => {
     try {
         const { userName, email, feedbackText, rating } = req.body;
 
@@ -139,7 +139,7 @@ exports.updateFeedback = async(req,res) => {
  * @param {express.Request} req 
  * @param {express.Response} res  
  */
-exports.deleteFeedback = async(req,res) => {
+export const deleteFeedback = async(req,res) => {
     try {
         const feedback = await Feedback.findByIdAndDelete(req.params.id);
         
