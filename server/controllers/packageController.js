@@ -3,7 +3,8 @@ import Package from "../models/Package.js";
 // Create a new package
 export const createPackage = async (req, res) => {
   try {
-    const { packageName, price, availability, ionmmks, description } = req.body;
+    const { packageName, price, availability, ionmmks, description, imageUrl } =
+      req.body;
 
     const newPackage = new Package({
       packageName,
@@ -11,6 +12,7 @@ export const createPackage = async (req, res) => {
       availability,
       ionmmks,
       description,
+      imageUrl,
     });
     await newPackage.save();
 
@@ -47,21 +49,20 @@ export const getPackageById = async (req, res) => {
 // Update a package
 export const updatePackage = async (req, res) => {
   try {
-    const { packageName, price, availability, ionmmks, description } = req.body;
+    const { packageName, price, availability, ionmmks, description, imageUrl } =
+      req.body;
     const updatedPackage = await Package.findByIdAndUpdate(
       req.params.id,
-      { packageName, price, availability, ionmmks, description },
+      { packageName, price, availability, ionmmks, description, imageUrl },
       { new: true }
     );
 
     if (!updatedPackage)
       return res.status(404).json({ message: "Package not found" });
-    res
-      .status(200)
-      .json({
-        message: "Package updated successfully",
-        package: updatedPackage,
-      });
+    res.status(200).json({
+      message: "Package updated successfully",
+      package: updatedPackage,
+    });
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
