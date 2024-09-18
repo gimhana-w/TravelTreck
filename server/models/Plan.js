@@ -1,24 +1,18 @@
+import mongoose from 'mongoose';
 
-const mongoose = require('mongoose');
+const { Schema } = mongoose;
 
-const planSchema = new mongoose.Schema({
-   user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true } ,
-   destinations: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Destination' }],
-   hotels: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Hotel' }],
-   vehicles: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Vehicle' }],
-   activities: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Activity' }],
-   startDate: { type: Date, required: true },
-   endDate: { type: Date, required: true },
-   totalCost: { type: Number, default: 0 },
+const planSchema = new Schema({
+  user: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+  destinations: [{ type: Schema.Types.ObjectId, ref: 'Destination' }],
+  hotels: [{ type: Schema.Types.ObjectId, ref: 'Hotel' }],
+  vehicles: [{ type: Schema.Types.ObjectId, ref: 'Vehicle' }],
+  activities: [{ type: Schema.Types.ObjectId, ref: 'Activity' }],
+  startDate: { type: Date, required: true },
+  endDate: { type: Date, required: true },
+  totalCost: { type: Number, default: 0 },
 }, {
-
-    timeseries: true,
+  timestamps: true,  // Correct property for auto timestamps
 });
 
-
-
-export default mongoose.model("Plan" , planSchema);
-
-
-
-
+export default mongoose.model('Plan', planSchema);

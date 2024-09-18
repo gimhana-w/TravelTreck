@@ -1,7 +1,7 @@
 import express from "express";
 import mongoose from "mongoose";
 import destinationRoutes from "./route/destiationRoutes.js";
-//import planRoutes from "./route/planRoutes.js";
+import planRoutes from "./route/planRoutes.js";
 
 
 const app = express();
@@ -9,7 +9,7 @@ const app = express();
 // Middleware
 app.use(express.json());
 app.use("/destination",destinationRoutes);
-//app.use("/plane",planRoutes);
+app.use("/plane",planRoutes);
 
 
 
