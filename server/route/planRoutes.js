@@ -1,13 +1,12 @@
-// server/routes/planRoutes.js
-import express from "express";
+import express from "express"; // Import express
+import { createPlan, getUserPlans, updatePlan, deletePlan } from "../controllers/planController.js"; // Import controller functions
 
-import { createPlan, getUserPlans, updatePlan, deletePlan } from"../controllers/planController.js";
-const router = express.Router();
+const router = express.Router(); // Create a new router
 
-//router.post('/', createPlan);
-router.get('/', getUserPlans);
-router.put('/:id', updatePlan);
-router.delete('/:id', deletePlan);
+// Define routes for the Plan resource
+router.get("/", getUserPlans); // Get all user plans
+router.post("/", createPlan); // Create a new plan
+router.put("/:id", updatePlan); // Update an existing plan by ID
+router.delete("/:id", deletePlan); // Delete a plan by ID
 
-//export default router;
-
+export default router; // Export the router
