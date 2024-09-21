@@ -15,6 +15,7 @@ import Adventure from "../Adventure/Adventure";
 import Package from "../Package/Package";
 import AdminReviews from "../Reviews/AdminReviews";
 import Header from "./Header";
+import Finance from "../Finance/Finance";
 
 const { Sider, Content } = Layout;
 
@@ -107,6 +108,7 @@ const AdminDashboard = () => {
             minHeight: 280,
           }}
         >
+          {activeIndex == 2 && <Finance />}
           {activeIndex === 3 && <VehicleManager />}
           {activeIndex === 5 && <AdvertisementManager />}
           {activeIndex === 7 && <Adventure />}
