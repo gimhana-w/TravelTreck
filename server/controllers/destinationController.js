@@ -1,115 +1,62 @@
 import Destination from "../models/Destination.js";
 
 // Get all destinations
-export const getDestinations = async (req, res) => {
-  let destinations;
-
+export const getAllDestinations = async (req, res) => {
   try {
-    // Fetch all destinations
-    destinations = await Destination.find();
+    const destinations = await Destination.find();
+    res.status(200).json(destinations);
   } catch (err) {
-    console.log(err);
-    return res.status(500).json({ message: "Error fetching destinations" });
+    res.status(500).json({ message: err.message });
   }
-
-  // If no destinations are found
-  if (!destinations) {
-    return res.status(404).json({ message: "Destinations not found" });
-  }
-
-  // Display all destinations
-  return res.status(200).json({ destinations });
 };
 
-//data insert
-
-export const addDestination = async (req,res,next) =>{
-
-  const{name,description,location,popular} = req.body;
-
-  let destination;
-
-  try{
-    destination = new Destination({name,description,location,popular});
-    await destination.save();
-
-  }catch(err){
-      console.log(err);
-
-  }
-
-  if (!destination){
-    
-    return res.status(404).send({message:"unable to add destination"});
-  }
-  return res.status(200).json({destination});
-
-};
-
-// Find destination by ID
-export const getById = async (req, res, next) => {
-  const id = req.params.id;
-
-  let destinations;
-
+// Get a destination by ID
+export const getDestinationById = async (req, res) => {
   try {
-    destinations = await Destination.findById(id);
+    const destination = await Destination.findById(req.params.id);
+    if (!destination)
+      return res.status(404).json({ message: "Destination not found" });
+    res.status(200).json(destination);
   } catch (err) {
-    console.log(err);
-    return res.status(500).json({ message: "Error finding destination" });
+    res.status(500).json({ message: err.message });
   }
-
-  if (!destinations) {
-    return res.status(404).send({ message: "Unable to find destination" });
-  }
-
-  return res.status(200).json({ destinations });
 };
 
-//update destination
-export const updateDestination = async (req, res, next) =>{
-
-  const id = req.params.id;
-
-  const{name,description,location,popular} = req.body;
-
-  let destinations;
-  
-  try{
-    destinations= await Destination.findByIdAndUpdate(id,
-      {name:name,description:description,location:location,popular:popular});
-      destinations = await destinations.save();
-
-  }catch(err){
-
-    console.log(err);
-
+// Create a new destination
+export const createDestination = async (req, res) => {
+  const destination = new Destination(req.body);
+  try {
+    const newDestination = await destination.save();
+    res.status(201).json(newDestination);
+  } catch (err) {
+    res.status(400).json({ message: err.message });
   }
-  if (!destinations) {
-    return res.status(404).send({ message: "Unable to Update" });
-  }
-
-  return res.status(200).json({ destinations });
-
 };
 
-//delete dastination
-export const deleteDestination = async(req,res, next) => {
-  const id = req.params.id;
-  
-  let dastinations;
-
-  try{
-
-    dastinations = await Destination.findByIdAndDelete(id);
-  }catch (err){
-    console.log(err)
+// Update a destination by ID
+export const updateDestination = async (req, res) => {
+  try {
+    const destination = await Destination.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      { new: true }
+    );
+    if (!destination)
+      return res.status(404).json({ message: "Destination not found" });
+    res.status(200).json(destination);
+  } catch (err) {
+    res.status(400).json({ message: err.message });
   }
-  if (!dastinations) {
-    return res.status(404).send({ message: "Unable to delete" });
+};
+
+// Delete a destination by ID
+export const deleteDestination = async (req, res) => {
+  try {
+    const destination = await Destination.findByIdAndDelete(req.params.id);
+    if (!destination)
+      return res.status(404).json({ message: "Destination not found" });
+    res.status(200).json({ message: "Destination deleted successfully" });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
   }
-
-  return res.status(200).json({ dastinations });
-
-
-}
+};

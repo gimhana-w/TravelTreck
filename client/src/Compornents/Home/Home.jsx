@@ -1,6 +1,6 @@
 import Nav from "../Nave/Nave.jsx";
 import Hero from "./Hero.jsx";
-import Tdest from "./Topdestination.jsx";
+import TopDestinations from "./Topdestination.jsx";
 import Footer from "../../components/Footer/index.jsx";
 import Packages from "./Packages.jsx";
 import TopActivity from "./TopActivity.jsx";
@@ -13,7 +13,8 @@ function Home() {
     <div>
       <Nav></Nav>
       <Hero></Hero>
-      <Tdest></Tdest> <WhyChooseUs />
+      <TopDestinations />
+      <WhyChooseUs />
       <Packages />
       <TopActivity />
       <BookVehicle />

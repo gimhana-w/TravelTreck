@@ -16,6 +16,7 @@ import Package from "../Package/Package";
 import AdminReviews from "../Reviews/AdminReviews";
 import Header from "./Header";
 import Finance from "../Finance/Finance";
+import DestinationManager from "../DestinationManager/DestinationManager";
 
 const { Sider, Content } = Layout;
 
@@ -97,6 +98,15 @@ const AdminDashboard = () => {
           >
             Adventures
           </Menu.Item>
+          <Menu.Item
+            onClick={() => {
+              onMenuItemClicked(8);
+            }}
+            key="8"
+            icon={<CompassOutlined />}
+          >
+            Destinations
+          </Menu.Item>
         </Menu>
       </Sider>
       <Layout style={{ minHeight: 280 }}>
@@ -114,6 +124,7 @@ const AdminDashboard = () => {
           {activeIndex === 7 && <Adventure />}
           {activeIndex === 4 && <Package />}
           {activeIndex === 6 && <AdminReviews />}
+          {activeIndex === 8 && <DestinationManager />}
         </Content>
       </Layout>
     </Layout>
