@@ -3,7 +3,8 @@ import User from "../models/sysUser.js";
 // Create a new user
 export const createUser = async (req, res) => {
   try {
-    const { name, email, role, occupation, objective, subscription } = req.body;
+    const { name, email, role, occupation, objective, subscription, password } =
+      req.body;
     const user = new User({
       name,
       email,
@@ -11,6 +12,7 @@ export const createUser = async (req, res) => {
       occupation,
       objective,
       subscription,
+      password,
     });
     await user.save();
     res.status(201).json({ message: "User created successfully", user });
