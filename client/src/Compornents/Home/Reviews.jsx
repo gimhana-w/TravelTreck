@@ -16,13 +16,14 @@ import {
   message,
 } from "antd";
 import { PlusOutlined, EditOutlined, DeleteOutlined } from "@ant-design/icons";
+import UserNameEmail from "../UserNameEmail/UserNameEmail";
 
 const Reviews = () => {
   const [reviews, setReviews] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingReview, setEditingReview] = useState(null);
   const [form] = Form.useForm();
-
+  const user = JSON.parse(localStorage.getItem("user"));
   useEffect(() => {
     fetchReviews();
   }, []);
@@ -72,7 +73,7 @@ const Reviews = () => {
         message.success("Review updated successfully");
       } else {
         // Create new review
-        await createReview(values);
+        await createReview({ ...values, reviewedBy: user["_id"] });
         message.success("Review created successfully");
       }
       fetchReviews();
@@ -91,49 +92,61 @@ const Reviews = () => {
         dataSource={reviews}
         renderItem={(review) => (
           <List.Item
-            actions={[
-              <Button
-                key={1}
-                type="primary"
-                icon={<EditOutlined />}
-                onClick={() => handleOpenModal(review)}
-              >
-                Edit
-              </Button>,
-              <Popconfirm
-                key={2}
-                title="Are you sure to delete this review?"
-                onConfirm={() => handleDeleteReview(review._id)}
-                okText="Yes"
-                cancelText="No"
-              >
-                <Button type="danger" icon={<DeleteOutlined />}>
-                  Delete
-                </Button>
-              </Popconfirm>,
-            ]}
+            actions={
+              review.reviewedBy == user["_id"]
+                ? [
+                    <Button
+                      key={1}
+                      type="primary"
+                      icon={<EditOutlined />}
+                      onClick={() => handleOpenModal(review)}
+                    ></Button>,
+                    <Popconfirm
+                      key={2}
+                      title="Are you sure to delete this review?"
+                      onConfirm={() => handleDeleteReview(review._id)}
+                      okText="Yes"
+                      cancelText="No"
+                    >
+                      <Button type="danger" icon={<DeleteOutlined />}></Button>
+                    </Popconfirm>,
+                  ]
+                : []
+            }
           >
-            <List.Item.Meta
-              title={review.reviewedBy.name}
-              description={
-                <>
-                  <Rate disabled defaultValue={review.numOfStars} />
-                  <p>{review.review}</p>
-                </>
-              }
-            />
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                width: "100%",
+              }}
+            >
+              <List.Item>
+                <UserNameEmail id={review.reviewedBy} />
+              </List.Item>
+              <List.Item.Meta
+                title={review.reviewedBy.name}
+                description={
+                  <>
+                    <Rate disabled defaultValue={review.numOfStars} />
+                    <p>{review.review}</p>
+                  </>
+                }
+              />
+            </div>
           </List.Item>
         )}
       />
-      <Button
-        type="primary"
-        shape="circle"
-        icon={<PlusOutlined />}
-        size="large"
-        onClick={() => handleOpenModal()}
-        style={{ position: "fixed", bottom: 20, right: 20 }}
-      />
-
+      {user && (
+        <Button
+          type="primary"
+          shape="circle"
+          icon={<PlusOutlined />}
+          size="large"
+          onClick={() => handleOpenModal()}
+          style={{ position: "fixed", bottom: 20, right: 20 }}
+        />
+      )}
       <Modal
         title={editingReview ? "Edit Review" : "Add Review"}
         open={isModalOpen}

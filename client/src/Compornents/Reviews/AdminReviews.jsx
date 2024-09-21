@@ -1,7 +1,14 @@
 import { useState, useEffect } from "react";
-import { Table, Button, Popconfirm, message, Rate } from "antd";
+import { Table, Button, Popconfirm, message, Rate, Row } from "antd";
 import { getAllReviews, deleteReview } from "../../services/reviewService";
-import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
+import {
+  DeleteOutlined,
+  EditOutlined,
+  FilePdfOutlined,
+} from "@ant-design/icons";
+import UserNameEmail from "../UserNameEmail/UserNameEmail";
+import jsPDF from "jspdf";
+import "jspdf-autotable";
 
 const AdminReviews = () => {
   const [reviews, setReviews] = useState([]);
@@ -34,11 +41,34 @@ const AdminReviews = () => {
     }
   };
 
+  const generatePDF = () => {
+    const doc = new jsPDF();
+    doc.setFontSize(20);
+    doc.text("Admin Reviews", 14, 22);
+
+    const tableColumn = ["Reviewer", "Review", "Rating", "Date"];
+    const tableRows = reviews.map((review) => [
+      review.reviewedBy, // Assuming this is the user ID
+      review.review,
+      review.numOfStars,
+      new Date(review.createdAt).toLocaleDateString(),
+    ]);
+
+    doc.autoTable({
+      head: [tableColumn],
+      body: tableRows,
+      startY: 30,
+    });
+
+    doc.save("admin_reviews.pdf");
+  };
+
   const columns = [
     {
       title: "Reviewer",
-      dataIndex: ["reviewedBy", "name"], // assuming review has `reviewedBy` field with `name`
+      dataIndex: "reviewedBy",
       key: "reviewedBy",
+      render: (reviewedBy) => <UserNameEmail id={reviewedBy} />,
     },
     {
       title: "Review",
@@ -66,7 +96,6 @@ const AdminReviews = () => {
             type="primary"
             icon={<EditOutlined />}
             style={{ marginRight: 8 }}
-            // handle edit logic here
             onClick={() => console.log("Edit review:", record._id)}
           >
             Edit
@@ -88,7 +117,17 @@ const AdminReviews = () => {
 
   return (
     <div>
-      <h2>Admin Reviews</h2>
+      <Row justify={"space-between"}>
+        <h2>Admin Reviews</h2>
+        <Button
+          type="primary"
+          icon={<FilePdfOutlined />}
+          onClick={generatePDF}
+          style={{ marginBottom: 16 }}
+        >
+          Generate PDF
+        </Button>
+      </Row>
       <Table
         columns={columns}
         dataSource={reviews}
