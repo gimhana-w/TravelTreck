@@ -13,6 +13,8 @@ import VehicleManager from "../Vehicle/VehicleManager";
 import AdvertisementManager from "../Advertisement/Advertisement";
 import Adventure from "../Adventure/Adventure";
 import Package from "../Package/Package";
+import AdminReviews from "../Reviews/AdminReviews";
+import Header from "./Header";
 
 const { Sider, Content } = Layout;
 
@@ -97,7 +99,7 @@ const AdminDashboard = () => {
         </Menu>
       </Sider>
       <Layout style={{ minHeight: 280 }}>
-        <div style={{ width: "100%", height: 100, background: "red" }}></div>
+        <Header />
         <Content
           style={{
             padding: 24,
@@ -109,6 +111,7 @@ const AdminDashboard = () => {
           {activeIndex === 5 && <AdvertisementManager />}
           {activeIndex === 7 && <Adventure />}
           {activeIndex === 4 && <Package />}
+          {activeIndex === 6 && <AdminReviews />}
         </Content>
       </Layout>
     </Layout>

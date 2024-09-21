@@ -19,7 +19,7 @@ export const createReview = async (req, res) => {
 // Get all reviews
 export const getReviews = async (req, res) => {
   try {
-    const reviews = await Review.find().populate("reviewedBy", "name email");
+    const reviews = await Review.find();
     res.status(200).json(reviews);
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -29,10 +29,7 @@ export const getReviews = async (req, res) => {
 // Get a single review by ID
 export const getReviewById = async (req, res) => {
   try {
-    const review = await Review.findById(req.params.id).populate(
-      "reviewedBy",
-      "name email"
-    );
+    const review = await Review.findById(req.params.id).populate("reviewedBy");
     if (!review) return res.status(404).json({ message: "Review not found" });
     res.status(200).json(review);
   } catch (error) {

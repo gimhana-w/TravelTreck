@@ -1,6 +1,5 @@
-import React from 'react';
+import PropTypes from "prop-types";
 
-// Example DestinationCard component (can be replaced with the actual import if it exists elsewhere)
 const DestinationCard = ({ name, img }) => (
   <div className="rounded-lg overflow-hidden shadow-md">
     <img src={img} alt={name} className="w-full h-40 object-cover" />
@@ -8,18 +7,25 @@ const DestinationCard = ({ name, img }) => (
   </div>
 );
 
+DestinationCard.propTypes = {
+  name: PropTypes.string.isRequired,
+  img: PropTypes.string.isRequired,
+};
+
 const Tdestini = () => {
   return (
     <div>
       {/* Top Destinations Section */}
       <section className="py-16">
         <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-gray-900 mb-8">Top Destinations</h2>
+          <h2 className="text-3xl font-bold text-gray-900 mb-8">
+            Top Destinations
+          </h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-            <DestinationCard name="Colombo" img="path_to_image" />
-            <DestinationCard name="Kandy" img="path_to_image" />
-            <DestinationCard name="Galle" img="path_to_image" />
-            <DestinationCard name="Sigiriya" img="path_to_image" />
+            <DestinationCard name="Colombo" img="colombo.jpg" />
+            <DestinationCard name="Kandy" img="kandy.jpg" />
+            <DestinationCard name="Galle" img="galle.webp" />
+            <DestinationCard name="Sigiriya" img="sigiriya.jpg" />
           </div>
         </div>
       </section>
