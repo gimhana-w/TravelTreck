@@ -2,10 +2,12 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import LoginModal from "../Auth/LoginModal"; // Import LoginModal
 import SignupModal from "../Auth/SignupModal"; // Import SignupModal
+import ProfileModal from "../Auth/ProfileModal";
 
 const Navbar = () => {
   const [isLoginModalVisible, setIsLoginModalVisible] = useState(false);
   const [isSignupModalVisible, setIsSignupModalVisible] = useState(false);
+  const [profileModalVisible, setProfileModalVisible] = useState(false);
 
   return (
     <nav className="w-full bg-white shadow-md py-4">
@@ -28,18 +30,30 @@ const Navbar = () => {
           </Link>
         </div>
         <div className="space-x-4">
-          <button
-            className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-700"
-            onClick={() => setIsLoginModalVisible(true)}
-          >
-            Sign in
-          </button>
-          <button
-            className="bg-gray-300 text-gray-600 px-4 py-2 rounded-md hover:bg-gray-400"
-            onClick={() => setIsSignupModalVisible(true)}
-          >
-            Sign up
-          </button>
+          {!localStorage.getItem("user") ? (
+            <>
+              {" "}
+              <button
+                className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-700"
+                onClick={() => setIsLoginModalVisible(true)}
+              >
+                Sign in
+              </button>
+              <button
+                className="bg-gray-300 text-gray-600 px-4 py-2 rounded-md hover:bg-gray-400"
+                onClick={() => setIsSignupModalVisible(true)}
+              >
+                Sign up
+              </button>
+            </>
+          ) : (
+            <button
+              className="bg-gray-300 text-gray-600 px-4 py-2 rounded-md hover:bg-gray-400"
+              onClick={() => setProfileModalVisible(true)}
+            >
+              Profile
+            </button>
+          )}
         </div>
       </div>
       <LoginModal
@@ -49,6 +63,10 @@ const Navbar = () => {
       <SignupModal
         visible={isSignupModalVisible}
         onClose={() => setIsSignupModalVisible(false)}
+      />{" "}
+      <ProfileModal
+        visible={profileModalVisible}
+        onClose={() => setProfileModalVisible(false)}
       />
     </nav>
   );

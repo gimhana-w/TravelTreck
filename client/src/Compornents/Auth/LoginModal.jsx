@@ -17,6 +17,7 @@ const LoginModal = ({ visible, onClose }) => {
       message.error(error.message);
     }
     setLoading(false);
+    location.reload();
   };
 
   return (
