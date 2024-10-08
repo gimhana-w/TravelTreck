@@ -10,22 +10,19 @@ const SignupModal = ({ visible, onClose }) => {
     setLoading(true);
     try {
       const data = { ...values, role: "user" }; // Set role to 'user' by default
-      const result = await userService.createUser(data);
-      localStorage.setItem(
-        "user",
-        JSON.stringify({
-          _id: result._id,
-          name: result.name,
-          email: result.email,
-        })
-      );
+      await userService.createUser(data);
+      const result = await userService.loginUser({
+        email: values.email,
+        password: values.password,
+      });
+      localStorage.setItem("user", JSON.stringify(result.user));
       message.success("Registration successful!");
       onClose();
     } catch (error) {
       message.error(error.message);
     }
     setLoading(false);
-    location.reload();
+    //location.reload();
   };
 
   return (

@@ -3,11 +3,15 @@ import { Link } from "react-router-dom";
 import LoginModal from "../Auth/LoginModal"; // Import LoginModal
 import SignupModal from "../Auth/SignupModal"; // Import SignupModal
 import ProfileModal from "../Auth/ProfileModal";
+import CreatePlanModal from "../Plan/CreatPlanModal";
+import MyPlans from "../Plan/MyPlans";
 
 const Navbar = () => {
   const [isLoginModalVisible, setIsLoginModalVisible] = useState(false);
   const [isSignupModalVisible, setIsSignupModalVisible] = useState(false);
   const [profileModalVisible, setProfileModalVisible] = useState(false);
+  const [createPlanModalVisible, setCreatePlanModalVisible] = useState(false);
+  const [myPlanModalVisible, setMyVisible] = useState(false);
 
   return (
     <nav className="w-full bg-white shadow-md py-4">
@@ -47,12 +51,16 @@ const Navbar = () => {
               </button>
             </>
           ) : (
-            <button
-              className="bg-gray-300 text-gray-600 px-4 py-2 rounded-md hover:bg-gray-400"
-              onClick={() => setProfileModalVisible(true)}
-            >
-              Profile
-            </button>
+            <>
+              <button onClick={() => setCreatePlanModalVisible(true)}>
+                Create Plan
+              </button>
+
+              <button onClick={() => setMyVisible(true)}>My Plans</button>
+              <button onClick={() => setProfileModalVisible(true)}>
+                Profile
+              </button>
+            </>
           )}
         </div>
       </div>
@@ -67,6 +75,14 @@ const Navbar = () => {
       <ProfileModal
         visible={profileModalVisible}
         onClose={() => setProfileModalVisible(false)}
+      />
+      <CreatePlanModal
+        visible={createPlanModalVisible}
+        onCancel={() => setCreatePlanModalVisible(false)}
+      />
+      <MyPlans
+        visible={myPlanModalVisible}
+        onClose={() => setMyVisible(false)}
       />
     </nav>
   );

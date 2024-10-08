@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Table, Button, Popconfirm, message, Spin, Input } from "antd";
+import { Table, Button, Popconfirm, message, Spin, Input, Row } from "antd";
 import {
   getAllAdventures,
   createAdventure,
@@ -8,6 +8,8 @@ import {
 } from "../../services/adventureService";
 import AdventureModal from "./AdventureModal";
 import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
+import jsPDF from "jspdf";
+import "jspdf-autotable";
 
 const AdventureManager = () => {
   const [adventures, setAdventures] = useState([]);
@@ -90,6 +92,27 @@ const AdventureManager = () => {
     adventure.title.toLowerCase().includes(searchText.toLowerCase())
   );
 
+  const generatePDF = () => {
+    const doc = new jsPDF();
+    doc.text("Adventures List", 14, 20);
+
+    const tableColumn = ["Title", "Description"];
+    const tableRows = [];
+
+    filteredAdventures.forEach((adventure) => {
+      const adventureData = [adventure.title, adventure.description];
+      tableRows.push(adventureData);
+    });
+
+    doc.autoTable({
+      head: [tableColumn],
+      body: tableRows,
+      startY: 30,
+    });
+
+    doc.save("adventures.pdf");
+  };
+
   const columns = [
     {
       title: "Title",
@@ -127,18 +150,28 @@ const AdventureManager = () => {
 
   return (
     <div>
-      <Button
-        type="primary"
-        onClick={handleCreate}
-        style={{ marginBottom: "16px" }}
-      >
-        Add Adventure
-      </Button>
-      <Input
-        placeholder="Search adventures"
-        onChange={handleSearch}
-        style={{ marginBottom: "16px", width: "300px" }}
-      />
+      <Row justify={"space-between"}>
+        {" "}
+        <Input
+          placeholder="Search adventures"
+          onChange={handleSearch}
+          style={{ marginBottom: "16px", width: "300px" }}
+        />
+        <Button
+          type="primary"
+          onClick={handleCreate}
+          style={{ marginBottom: "16px" }}
+        >
+          Add Adventure
+        </Button>
+        <Button
+          type="primary"
+          onClick={generatePDF}
+          style={{ marginBottom: "16px" }}
+        >
+          Export as PDF
+        </Button>
+      </Row>
       <Spin spinning={loading}>
         <Table columns={columns} dataSource={filteredAdventures} rowKey="_id" />
       </Spin>

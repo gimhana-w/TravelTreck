@@ -11,6 +11,7 @@ import advertisementRoutes from "./route/advertisementRoutes.js";
 import reviewRoutes from "./route/reviewRoutes.js";
 import adventureRoutes from "./route/adventureRoutes.js";
 import financeRoutes from "./route/financeRoute.js";
+import touristPlanRoutes from "./route/touristPlanRoutes.js";
 
 const app = express();
 
@@ -29,6 +30,8 @@ app.use("/api/reviews", reviewRoutes);
 app.use("/api/adventures", adventureRoutes);
 app.use("/api/finance", financeRoutes);
 app.use("/api/destinations", destinationRoutes);
+app.use("/api/tourist-plans", touristPlanRoutes);
+
 //database conection
 mongoose
   .connect("mongodb+srv://admin:WNM6le3U5gTaDz5d@users.xzqkmsk.mongodb.net/")

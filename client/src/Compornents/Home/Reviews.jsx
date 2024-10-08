@@ -93,24 +93,29 @@ const Reviews = () => {
         renderItem={(review) => (
           <List.Item
             actions={
-              review.reviewedBy == user["_id"]
-                ? [
-                    <Button
-                      key={1}
-                      type="primary"
-                      icon={<EditOutlined />}
-                      onClick={() => handleOpenModal(review)}
-                    ></Button>,
-                    <Popconfirm
-                      key={2}
-                      title="Are you sure to delete this review?"
-                      onConfirm={() => handleDeleteReview(review._id)}
-                      okText="Yes"
-                      cancelText="No"
-                    >
-                      <Button type="danger" icon={<DeleteOutlined />}></Button>
-                    </Popconfirm>,
-                  ]
+              user
+                ? review.reviewedBy == user["_id"]
+                  ? [
+                      <Button
+                        key={1}
+                        type="primary"
+                        icon={<EditOutlined />}
+                        onClick={() => handleOpenModal(review)}
+                      ></Button>,
+                      <Popconfirm
+                        key={2}
+                        title="Are you sure to delete this review?"
+                        onConfirm={() => handleDeleteReview(review._id)}
+                        okText="Yes"
+                        cancelText="No"
+                      >
+                        <Button
+                          type="danger"
+                          icon={<DeleteOutlined />}
+                        ></Button>
+                      </Popconfirm>,
+                    ]
+                  : []
                 : []
             }
           >
