@@ -7,6 +7,7 @@ import {
   BellOutlined,
   StarOutlined,
   CompassOutlined,
+  UserAddOutlined,
 } from "@ant-design/icons";
 import { useState } from "react";
 import VehicleManager from "../Vehicle/VehicleManager";
@@ -17,6 +18,7 @@ import AdminReviews from "../Reviews/AdminReviews";
 import Header from "./Header";
 import Finance from "../Finance/Finance";
 import DestinationManager from "../DestinationManager/DestinationManager";
+import UserMnager from "../Users/UserMnager";
 
 const { Sider, Content } = Layout;
 
@@ -107,6 +109,15 @@ const AdminDashboard = () => {
           >
             Destinations
           </Menu.Item>
+          <Menu.Item
+            onClick={() => {
+              onMenuItemClicked(9);
+            }}
+            key="9"
+            icon={<UserAddOutlined />}
+          >
+            Users
+          </Menu.Item>
         </Menu>
       </Sider>
       <Layout style={{ minHeight: 280 }}>
@@ -125,6 +136,7 @@ const AdminDashboard = () => {
           {activeIndex === 4 && <Package />}
           {activeIndex === 6 && <AdminReviews />}
           {activeIndex === 8 && <DestinationManager />}
+          {activeIndex === 9 && <UserMnager />}
         </Content>
       </Layout>
     </Layout>

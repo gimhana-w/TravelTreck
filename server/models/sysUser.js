@@ -9,6 +9,7 @@ const userSchema = new mongoose.Schema(
     occupation: { type: String, default: null },
     objective: { type: String, default: null },
     subscription: { type: String, default: null },
+    role: { type: String, default: "User" },
   },
   {
     timestamps: true,

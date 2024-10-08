@@ -1,30 +1,53 @@
 import { useEffect, useState } from "react";
-import PropTypes from "prop-types"; // Import PropTypes
-import { Modal, Form, Input, Button, Spin, message, Popconfirm } from "antd";
+import PropTypes from "prop-types";
+import {
+  Modal,
+  Form,
+  Input,
+  Button,
+  Spin,
+  message,
+  Popconfirm,
+  Space,
+  Select,
+} from "antd";
 import userService from "../../services/userService";
 
+const { Option } = Select;
+
 const ProfileModal = ({ visible, onClose }) => {
-  const user = JSON.parse(localStorage.getItem("user"));
-  const [currentUser, setCurrentUser] = useState();
+  const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(false);
   const [form] = Form.useForm();
 
-  // Populate form with user data
-  const populateForm = () => {
-    form.setFieldsValue({
-      name: currentUser.name,
-      email: currentUser.email,
-    });
-  };
-
   useEffect(() => {
-    if (user) {
-      userService.getUserById(user["_id"]).then((res) => {
-        setCurrentUser(res);
-        populateForm();
-      });
+    const fetchUser = async () => {
+      const storedUser = JSON.parse(localStorage.getItem("user"));
+      if (storedUser) {
+        setLoading(true);
+        try {
+          const userData = await userService.getUserById(storedUser._id);
+          setUser(userData);
+          form.setFieldsValue({
+            name: userData.name,
+            email: userData.email,
+            occupation: userData.occupation,
+            objective: userData.objective,
+            subscription: userData.subscription,
+          });
+        } catch (error) {
+          console.error(error);
+          message.error("Failed to fetch user data");
+        } finally {
+          setLoading(false);
+        }
+      }
+    };
+
+    if (visible) {
+      fetchUser();
     }
-  }, []);
+  }, [visible, form]);
 
   const onFinish = async (values) => {
     setLoading(true);
@@ -34,13 +57,14 @@ const ProfileModal = ({ visible, onClose }) => {
       onClose();
     } catch (error) {
       message.error(error.message);
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   const handleLogout = () => {
     localStorage.clear();
-    window.location.reload(); // Reload the page after logout
+    window.location.reload();
   };
 
   const handleDeleteAccount = async () => {
@@ -49,66 +73,90 @@ const ProfileModal = ({ visible, onClose }) => {
       await userService.deleteUser(user._id);
       localStorage.clear();
       message.success("Account deleted successfully!");
-      window.location.reload(); // Reload the page after deletion
+      window.location.reload();
     } catch (error) {
       message.error(error.message);
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   return (
-    <Modal title="Profile" visible={visible} onCancel={onClose} footer={null}>
+    <Modal
+      title="Profile"
+      visible={visible}
+      onCancel={onClose}
+      footer={null}
+      destroyOnClose={true}
+    >
       <Spin spinning={loading}>
         <Form
           form={form}
           name="profile_form"
           onFinish={onFinish}
-          autoComplete="off"
+          layout="vertical"
         >
           <Form.Item
             name="name"
+            label="Name"
             rules={[{ required: true, message: "Please input your name!" }]}
           >
-            <Input placeholder="Name" />
+            <Input />
           </Form.Item>
 
           <Form.Item
             name="email"
+            label="Email"
             rules={[
               { required: true, message: "Please input your email!" },
               { type: "email", message: "Please enter a valid email!" },
             ]}
           >
-            <Input placeholder="Email" />
+            <Input />
+          </Form.Item>
+
+          <Form.Item name="occupation" label="Occupation">
+            <Input />
+          </Form.Item>
+
+          <Form.Item name="objective" label="Objective">
+            <Input.TextArea rows={4} />
+          </Form.Item>
+
+          <Form.Item name="subscription" label="Subscription">
+            <Select>
+              <Option value={null}>None</Option>
+              <Option value="basic">Basic</Option>
+              <Option value="premium">Premium</Option>
+            </Select>
           </Form.Item>
 
           <Form.Item>
-            <Button type="primary" htmlType="submit" block>
-              Update Profile
-            </Button>
+            <Space direction="vertical" style={{ width: "100%" }}>
+              <Button type="primary" htmlType="submit" block>
+                Update Profile
+              </Button>
+              <Popconfirm
+                title="Are you sure you want to delete your account?"
+                onConfirm={handleDeleteAccount}
+                okText="Yes"
+                cancelText="No"
+              >
+                <Button danger block>
+                  Delete Account
+                </Button>
+              </Popconfirm>
+              <Button type="default" block onClick={handleLogout}>
+                Logout
+              </Button>
+            </Space>
           </Form.Item>
         </Form>
-
-        <Popconfirm
-          title="Are you sure you want to delete your account?"
-          onConfirm={handleDeleteAccount}
-          okText="Yes"
-          cancelText="No"
-        >
-          <Button danger block>
-            Delete Account
-          </Button>
-        </Popconfirm>
-        <div style={{ height: 16 }} />
-        <Button type="default" block onClick={handleLogout}>
-          Logout
-        </Button>
       </Spin>
     </Modal>
   );
 };
 
-// Define prop types
 ProfileModal.propTypes = {
   visible: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
