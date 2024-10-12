@@ -11,18 +11,17 @@ const MyPlans = ({ visible, onClose }) => {
 
   useEffect(() => {
     const fetchPlans = async () => {
-      const userId = localStorage.getItem("uid");
+      const uid = JSON.parse(localStorage.getItem("user"))["_id"];
+      console.log(uid);
+      const userId = uid;
       if (!userId) {
-        message.error("User ID not found. Please log in.");
         setLoading(false);
         return;
       }
 
       try {
         let fetchedPlans = await TouristPlanService.getAllTouristPlans();
-        fetchedPlans = fetchedPlans.filter(
-          (plan) => plan?.userId === localStorage.getItem("uid")
-        );
+        fetchedPlans = fetchedPlans.filter((plan) => plan?.userId === uid);
         setPlans(fetchedPlans);
       } catch (error) {
         console.error("Failed to fetch plans:", error);

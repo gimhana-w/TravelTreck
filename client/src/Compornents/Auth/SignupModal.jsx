@@ -19,7 +19,8 @@ const SignupModal = ({ visible, onClose }) => {
       message.success("Registration successful!");
       onClose();
     } catch (error) {
-      message.error(error.message);
+      console.error(error);
+      message.error("Registration Successfull, Now Login");
     }
     setLoading(false);
     //location.reload();

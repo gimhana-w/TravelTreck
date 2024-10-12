@@ -27,17 +27,22 @@ const CreatePlanModal = ({ visible, onCancel }) => {
   }, []);
 
   const onFinish = async (values) => {
+    const user = JSON.parse(localStorage.getItem("user"))["_id"];
+
     setLoading(true);
     try {
       const planData = {
+        userId: user,
         ...values,
+
         hotels: values.destinations.map((dh) => ({
           destinationId: dh.destinationId,
           name: dh.name,
         })),
         destinations: values.destinations.map((dh) => dh.destinationId),
-        userId: localStorage.getItem("uid"),
       };
+      console.log(planData);
+
       await TouristPlanService.createTouristPlan(planData);
       message.success("Plan created successfully");
       form.resetFields();
