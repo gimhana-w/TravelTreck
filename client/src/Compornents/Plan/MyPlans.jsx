@@ -1,20 +1,19 @@
-import { useState, useEffect } from "react";
-import { List, Card, Typography, Spin, message, Modal } from "antd";
+import React, { useState, useEffect } from 'react';
+import { Modal, List, Card, Typography, Spin, message, Button } from 'antd';
 import TouristPlanService from "../../services/touristPlanService";
-import PropTypes from "prop-types"; // Import PropTypes
+import PropTypes from "prop-types";
 
 const { Title, Text } = Typography;
 
-const MyPlans = ({ visible, onClose }) => {
+const MyPlans = ({ visible, onClose, onDelete, onUpdate }) => {
   const [plans, setPlans] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  // Fetch the plans when the component mounts
   useEffect(() => {
     const fetchPlans = async () => {
       const uid = JSON.parse(localStorage.getItem("user"))["_id"];
-      console.log(uid);
-      const userId = uid;
-      if (!userId) {
+      if (!uid) {
         setLoading(false);
         return;
       }
@@ -33,6 +32,21 @@ const MyPlans = ({ visible, onClose }) => {
 
     fetchPlans();
   }, []);
+
+  // Handle delete action
+  const handleDelete = async (planId) => {
+    try {
+      await TouristPlanService.deleteTouristPlan(planId);
+      message.success("Plan deleted successfully");
+      setPlans(plans.filter(plan => plan._id !== planId)); // Remove deleted plan from state
+    } catch (error) {
+      console.error("Failed to delete plan:", error);
+      message.error("Failed to delete plan");
+    }
+  };
+
+ 
+ 
 
   if (loading) {
     return <Spin size="large" />;
@@ -63,6 +77,7 @@ const MyPlans = ({ visible, onClose }) => {
               </ul>
               <Text strong>Created on: </Text>
               {new Date(plan.createdAt).toLocaleDateString()}
+              <Button type="primary" danger onClick={() => handleDelete(plan._id)}>Delete</Button>
             </Card>
           </List.Item>
         )}
@@ -71,10 +86,11 @@ const MyPlans = ({ visible, onClose }) => {
   );
 };
 
-// Add PropTypes for props validation
 MyPlans.propTypes = {
-  visible: PropTypes.bool.isRequired, // visible should be a boolean
-  onClose: PropTypes.func.isRequired, // onClose should be a function
+  visible: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
+  onDelete: PropTypes.func.isRequired,
+ 
 };
 
 export default MyPlans;

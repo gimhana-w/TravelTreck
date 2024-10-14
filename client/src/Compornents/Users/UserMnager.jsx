@@ -8,7 +8,12 @@ import {
   Input,
   Select,
   message,
+  Row,
+  Col,
 } from "antd";
+import { SearchOutlined } from "@ant-design/icons";
+import jsPDF from "jspdf"; // Import jsPDF
+import "jspdf-autotable"; // Import the autoTable plugin
 import userService from "../../services/userService";
 
 const { Option } = Select;
@@ -19,12 +24,15 @@ const UserManager = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [form] = Form.useForm();
   const [editingUser, setEditingUser] = useState(null);
+  const [searchText, setSearchText] = useState(""); // Search text state
+  const [filteredUsers, setFilteredUsers] = useState([]); // State for filtered users
 
   const fetchUsers = async () => {
     setLoading(true);
     try {
       const data = await userService.getUsers();
       setUsers(data);
+      setFilteredUsers(data); // Initialize filtered users list
     } catch (error) {
       console.error(`Error loading users ${error}`);
       message.error("Failed to fetch users");
@@ -36,6 +44,27 @@ const UserManager = () => {
   useEffect(() => {
     fetchUsers();
   }, []);
+
+  // Handle search input change
+  const handleSearch = (e) => {
+    const value = e.target.value.toLowerCase();
+    setSearchText(value);
+    const filtered = users.filter((user) =>
+      user.name.toLowerCase().includes(value)
+    );
+    setFilteredUsers(filtered);
+  };
+
+  // Generate PDF Report for all users (Name, Email, Role)
+  const generatePDFReport = () => {
+    const doc = new jsPDF();
+    doc.text("User Report", 20, 10); // Title of the PDF
+    doc.autoTable({
+      head: [["Name", "Email", "Role"]], // Table headers
+      body: users.map((user) => [user.name, user.email, user.role]), // Map users data into table rows
+    });
+    doc.save("user_report.pdf"); // Save the file
+  };
 
   const handleAddEdit = async (values) => {
     try {
@@ -79,7 +108,6 @@ const UserManager = () => {
       key: "subscription",
       render: (text) => text || "N/A", // If text is empty or null, render "N/A"
     },
-
     {
       title: "Action",
       key: "action",
@@ -106,20 +134,39 @@ const UserManager = () => {
 
   return (
     <div style={{ padding: "20px" }}>
-      <Button
-        type="primary"
-        onClick={() => {
-          setEditingUser(null);
-          form.resetFields();
-          setModalVisible(true);
-        }}
-        style={{ marginBottom: "20px" }}
-      >
-        Add New User
-      </Button>
+      <Row justify="space-between" style={{ marginBottom: "20px" }}>
+        <Col span={12}>
+          <Input
+            placeholder="Search by user name"
+            prefix={<SearchOutlined />}
+            value={searchText}
+            onChange={handleSearch}
+          />
+        </Col>
+        <Col span={12} style={{ textAlign: "right" }}>
+          <Button
+            type="primary"
+            onClick={() => {
+              setEditingUser(null);
+              form.resetFields();
+              setModalVisible(true);
+            }}
+          >
+            Add New User
+          </Button>
+          <Button
+            type="primary"
+            onClick={generatePDFReport}
+            style={{ marginLeft: "10px" }}
+          >
+            Generate Report
+          </Button>
+        </Col>
+      </Row>
+
       <Table
         columns={columns}
-        dataSource={users}
+        dataSource={filteredUsers}
         rowKey="_id"
         loading={loading}
       />

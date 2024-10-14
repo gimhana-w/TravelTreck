@@ -18,7 +18,7 @@ function Home() {
       <Packages />
       <TopActivity />
       <BookVehicle />
-      <Reviews />
+     <Reviews />
       <Footer />
     </div>
   );
