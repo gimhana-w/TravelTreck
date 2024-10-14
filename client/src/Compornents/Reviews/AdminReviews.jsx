@@ -1,11 +1,7 @@
 import { useState, useEffect } from "react";
-import { Table, Button, Popconfirm, message, Rate, Row } from "antd";
+import { Table, Button, Popconfirm, message, Rate, Row, Input, Col } from "antd";
 import { getAllReviews, deleteReview } from "../../services/reviewService";
-import {
-  DeleteOutlined,
-  EditOutlined,
-  FilePdfOutlined,
-} from "@ant-design/icons";
+import { DeleteOutlined, EditOutlined, FilePdfOutlined, SearchOutlined } from "@ant-design/icons";
 import UserNameEmail from "../UserNameEmail/UserNameEmail";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
@@ -13,6 +9,8 @@ import "jspdf-autotable";
 const AdminReviews = () => {
   const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [searchText, setSearchText] = useState(""); // State to store the search text
+  const [filteredReviews, setFilteredReviews] = useState([]); // State to store filtered reviews
 
   useEffect(() => {
     fetchReviews();
@@ -22,6 +20,7 @@ const AdminReviews = () => {
     try {
       const fetchedReviews = await getAllReviews();
       setReviews(fetchedReviews);
+      setFilteredReviews(fetchedReviews); // Set initial filtered reviews
       setLoading(false);
     } catch (error) {
       console.error("Error fetching reviews:", error);
@@ -63,6 +62,18 @@ const AdminReviews = () => {
     doc.save("admin_reviews.pdf");
   };
 
+  // Search handler function
+  const handleSearch = (e) => {
+    const value = e.target.value.toLowerCase();
+    setSearchText(value);
+    const filtered = reviews.filter(
+      (review) =>
+        review.review.toLowerCase().includes(value) || // Search by review content
+        review.reviewedBy.toLowerCase().includes(value) // Assuming `reviewedBy` is a string (like a name or email)
+    );
+    setFilteredReviews(filtered);
+  };
+
   const columns = [
     {
       title: "Reviewer",
@@ -92,14 +103,7 @@ const AdminReviews = () => {
       key: "action",
       render: (_, record) => (
         <>
-          <Button
-            type="primary"
-            icon={<EditOutlined />}
-            style={{ marginRight: 8 }}
-            onClick={() => console.log("Edit review:", record._id)}
-          >
-            Edit
-          </Button>
+
           <Popconfirm
             title="Are you sure to delete this review?"
             onConfirm={() => handleDelete(record._id)}
@@ -117,20 +121,28 @@ const AdminReviews = () => {
 
   return (
     <div>
-      <Row justify={"space-between"}>
+      <Row justify="space-between" style={{ marginBottom: 16 }}>
         <h2>Admin Reviews</h2>
-        <Button
-          type="primary"
-          icon={<FilePdfOutlined />}
-          onClick={generatePDF}
-          style={{ marginBottom: 16 }}
-        >
-          Generate PDF
-        </Button>
+        <Col>
+          <Input
+            placeholder="Search by reviewer or review"
+            prefix={<SearchOutlined />}
+            value={searchText}
+            onChange={handleSearch}
+            style={{ width: 300, marginRight: 16 }}
+          />
+          <Button
+            type="primary"
+            icon={<FilePdfOutlined />}
+            onClick={generatePDF}
+          >
+            Generate PDF
+          </Button>
+        </Col>
       </Row>
       <Table
         columns={columns}
-        dataSource={reviews}
+        dataSource={filteredReviews}
         rowKey="_id" // assuming reviews have `_id` field
         loading={loading}
         pagination={{ pageSize: 5 }}

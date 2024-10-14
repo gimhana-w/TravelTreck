@@ -1,7 +1,9 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
 import { getAllPackages } from "../../services/packageService";
+import { createSitePayment } from "../../services/financeService"; // Import the create payment function
 
+// Styled components remain unchanged
 const PackagesContainer = styled.div`
   padding: 20px;
   background-color: #f0f8ff;
@@ -119,6 +121,22 @@ const ModalInfo = styled.p`
   margin-bottom: 5px;
 `;
 
+const PayNowButton = styled.button`
+  background-color: #28a745;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  width: 100%;
+  margin-top: 15px;
+
+  &:hover {
+    background-color: #218838;
+  }
+`;
+
 const Packages = () => {
   const [packages, setPackages] = useState([]);
   const [selectedPackage, setSelectedPackage] = useState(null);
@@ -141,6 +159,28 @@ const Packages = () => {
 
   const closeModal = () => {
     setSelectedPackage(null);
+  };
+
+  // Modified handlePayment function
+  const handlePayment = async (pkg) => {
+    try {
+      // Call createSitePayment with package and payment details
+      const paymentData = {
+        paidUserName: "John Doe", // This should be dynamically set (e.g., from user session)
+        paidAmount: pkg.price,
+        paymentType: "Package Book",
+        paidUserEmail: "john.doe@example.com", // Replace with actual user email
+        paidUserPhoneNumber: "1234567890", // Optional phone number
+        paidUserAddress: "123 Main St", // Optional address
+        description: `Payment for ${pkg.packageName}`, // Description
+      };
+
+      await createSitePayment(paymentData); // Create the payment
+      alert("Payment successfully recorded!");
+    } catch (error) {
+      console.error("Error processing payment: ", error);
+      alert("Failed to record payment.");
+    }
   };
 
   return (
@@ -188,6 +228,11 @@ const Packages = () => {
               <strong>Updated At:</strong>{" "}
               {new Date(selectedPackage.updatedAt).toLocaleDateString()}
             </ModalInfo>
+
+            {/* Pay Now Button */}
+            <PayNowButton onClick={() => handlePayment(selectedPackage)}>
+              Pay Now
+            </PayNowButton>
           </ModalContent>
         </Modal>
       )}
