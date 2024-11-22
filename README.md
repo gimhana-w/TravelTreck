@@ -1,4 +1,5 @@
-TavalTreck: Your Ultimate Tourist Travel Planning System 🌍
+TavalTreck: Your Ultimate Tourist Travel Planning System using MERN stak🌍
+
 TavalTreck is a comprehensive web application designed to revolutionize the way travelers plan and experience their journeys. With its robust features, TavalTreck caters to administrators, tourists, suppliers, and managers, creating a seamless ecosystem for travel management.
 
 Key Features:
